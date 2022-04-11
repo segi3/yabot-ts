@@ -1,6 +1,6 @@
 import { Client, Message, MessageEmbed, TextChannel } from "discord.js";
 import profileSchema from "./../schemas/profile-schema";
-import { addCoins, getCoins } from './../bot-module/coins'
+import { AddCoins, GetCoins } from './../bot-module/coins'
 import mongoose from "mongoose";
 
 const { bot_channels } = require('./../data/static/channels.json')
@@ -20,13 +20,13 @@ export default (client: Client) => {
             Math.random() * (max-min+1) + min
         )
 
-        addGuildMemberXP(guild!.id, member!.id, xp, message)
+        AddGuildMemberXP(guild!.id, member!.id, xp, message)
     })
 }
 
-const getRequiredXP = (level: number):number => level * 100
+export const GetRequiredXP = (level: number):number => level * 100
 
-const addGuildMemberXP = async (guildId: string, userId: string, xpToAdd: number, message: Message) => {
+const AddGuildMemberXP = async (guildId: string, userId: string, xpToAdd: number, message: Message) => {
     
     const result  = await profileSchema.findOneAndUpdate({
         guildId, userId
@@ -43,7 +43,7 @@ const addGuildMemberXP = async (guildId: string, userId: string, xpToAdd: number
 
     let { xp, level } = result
 
-    const requiredXp = getRequiredXP(level)
+    const requiredXp = GetRequiredXP(level)
 
     if (xp >= requiredXp) {
         level++
@@ -65,7 +65,7 @@ const addGuildMemberXP = async (guildId: string, userId: string, xpToAdd: number
 
         let coinFromLevelUp = level * 50
 
-        await addCoins(guildId, userId, coinFromLevelUp)
+        await AddCoins(guildId, userId, coinFromLevelUp)
     }
 
 }

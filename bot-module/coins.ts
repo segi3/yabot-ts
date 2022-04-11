@@ -5,7 +5,7 @@ interface loose {
 }
 var coinsCache: loose = {}
 
-export const addCoins = async(guildId: string, userId: string, coins: number) => {
+export const AddCoins = async(guildId: string, userId: string, coins: number) => {
 
     const result = await profileSchema.findOneAndUpdate({
         guildId, userId
@@ -25,7 +25,7 @@ export const addCoins = async(guildId: string, userId: string, coins: number) =>
     return result.coins
 }
 
-export const getCoins = async(guildId: string, userId: string) => {
+export const GetCoins = async(guildId: string, userId: string) => {
     
     const cachedCoins = coinsCache[`${guildId}-${userId}`]
 

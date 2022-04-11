@@ -1,9 +1,9 @@
 import { GuildMember, MessageEmbed } from "discord.js";
-import { getRequiredXP } from "../../features/levels";
+import { GetRequiredXP } from "../../features/levels";
 
 export const ProfileEmbed = (member: GuildMember, data: any):MessageEmbed => {
 
-    const requiredXP = getRequiredXP(data.level)
+    const requiredXP = GetRequiredXP(data.level)
 
     const profileEmbed = new MessageEmbed()
         .setAuthor({
