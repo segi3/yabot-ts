@@ -2,6 +2,7 @@ import { Client, Message, MessageEmbed, TextChannel } from "discord.js";
 import profileSchema from "./../schemas/profile-schema";
 import { AddCoins, GetCoins } from './../bot-module/coins'
 import mongoose from "mongoose";
+import { AddUserLevel, AddUserXp } from "../service/user";
 
 const { bot_channels } = require('./../data/static/channels.json')
 
@@ -28,26 +29,18 @@ export const GetRequiredXP = (level: number):number => level * 100
 
 const AddGuildMemberXP = async (guildId: string, userId: string, xpToAdd: number, message: Message) => {
     
-    const result  = await profileSchema.findOneAndUpdate({
-        guildId, userId
-    }, {
-        guildId,
-        userId,
-        $inc: {
-            xp: xpToAdd
-        }
-    }, {
-        upsert: true,
-        new: true
-    })
+    const result  = await AddUserXp(guildId, userId, xpToAdd)
 
     let { xp, level } = result
 
     const requiredXp = GetRequiredXP(level)
 
     if (xp >= requiredXp) {
+        console.log('initial xp ' + xp)
         level++
-        xp -= requiredXp
+        let xpRemaining = xp - requiredXp
+        
+        await AddUserLevel(guildId, userId, level, xpRemaining)
 
         const levelUpEmbed = new MessageEmbed()
             .setColor('#f9b243')
@@ -55,12 +48,6 @@ const AddGuildMemberXP = async (guildId: string, userId: string, xpToAdd: number
         const botChannel = message.client.channels.cache.get(bot_channels[guildId]) as TextChannel
         botChannel!.send({
             embeds: [levelUpEmbed]
-        })
-
-        await profileSchema.updateOne({
-            guildId, userId
-        }, {
-            level, xp
         })
 
         let coinFromLevelUp = level * 50
