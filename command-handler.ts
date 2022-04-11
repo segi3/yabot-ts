@@ -38,7 +38,7 @@ export default (client: Client) => {
         .then(() => console.log('successfully registered guild bot commands!'))
         .catch(console.error)
 
-    if (process.env.GLOBAL_COMMAND) {
+    if (process.env.GLOBAL_COMMAND && JSON.parse(process.env.GLOBAL_COMMAND!)) {
         console.log('registering global command...')
         rest.put(Routes.applicationCommands(clientId, guildId), {body: commandsData})
             .then(() => console.log('registering global command...done!'))
