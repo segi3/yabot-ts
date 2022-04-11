@@ -35,7 +35,7 @@ export default (client: Client) => {
 
     const rest = new REST({version: '9'}).setToken(token)
     rest.put(Routes.applicationGuildCommands(clientId, guildId), {body: commandsData})
-        .then(() => console.log('successfully guild registered bot commands!'))
+        .then(() => console.log('successfully registered guild bot commands!'))
         .catch(console.error)
 
     if (process.env.GLOBAL_COMMAND) {

@@ -21,8 +21,6 @@ export default (client: Client) => {
         )
 
         addGuildMemberXP(guild!.id, member!.id, xp, message)
-
-        console.log(message.content)
     })
 }
 
@@ -42,8 +40,6 @@ const addGuildMemberXP = async (guildId: string, userId: string, xpToAdd: number
         upsert: true,
         new: true
     })
-
-    console.log(guildId, userId)
 
     let { xp, level } = result
 

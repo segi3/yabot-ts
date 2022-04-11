@@ -28,8 +28,6 @@ client.on('ready', async () => {
     if (level.default) level = level.default
     level(client)
 
-
-    console.log('Bot is ready!')
 })
 
 client.login(process.env.TOKEN)
