@@ -27,7 +27,7 @@ export default (client: Client) => {
         commandsData.push(commands[commandName.toLowerCase()].data.toJSON())
     }
 
-    console.log(commands)
+    // console.log(commands)
 
     const token = process.env.TOKEN!
     const guildId =  process.env.TEST_GUILD_ID
@@ -35,8 +35,16 @@ export default (client: Client) => {
 
     const rest = new REST({version: '9'}).setToken(token)
     rest.put(Routes.applicationGuildCommands(clientId, guildId), {body: commandsData})
-        .then(() => console.log('successfully registered bot commands!'))
+        .then(() => console.log('successfully guild registered bot commands!'))
         .catch(console.error)
+
+    if (process.env.GLOBAL_COMMAND) {
+        console.log('registering global command...')
+        rest.put(Routes.applicationCommands(clientId, guildId), {body: commandsData})
+            .then(() => console.log('registering global command...done!'))
+            .catch(console.error)
+    }
+    
 
     client.on('messageCreate', (message) => {
         if (message.author.bot || !message.content.startsWith('+')) {
