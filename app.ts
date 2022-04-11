@@ -1,6 +1,7 @@
 import DiscordJS, { Intents } from 'discord.js'
 import dotenv from 'dotenv'
 
+
 dotenv.config()
 
 const client = new DiscordJS.Client({
@@ -9,10 +10,16 @@ const client = new DiscordJS.Client({
         Intents.FLAGS.GUILD_MESSAGES,
         Intents.FLAGS.GUILD_MEMBERS,
         Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+        Intents.FLAGS.DIRECT_MESSAGE_TYPING
     ]
 })
 
-client.on('ready', () => {
+client.on('ready', async () => {
+
+    let mongod = require('./utils/mongod')
+    if (mongod.default) mongod = mongod.default
+    await mongod()
+
     let handler = require('./command-handler')
     if (handler.default) handler = handler.default
     handler(client)
