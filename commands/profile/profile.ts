@@ -9,18 +9,18 @@ export default {
     data: new SlashCommandBuilder()
         .setName('profile')
         .setDescription('Show profile summary'),
-        execute: async (interaction: BaseCommandInteraction) => {
+    execute: async (interaction: BaseCommandInteraction) => {
 
-            const { guild, member } = interaction
-            const username = member!.user.username
-            const discriminator = member!.user.discriminator
+        const { guild, member } = interaction
+        const username = member!.user.username
+        const discriminator = member!.user.discriminator
 
-            const user = await GetUser(username, discriminator, guild!.id, member!.user.id)
-            
-            const profileEmbed = ProfileEmbed(interaction.member as GuildMember, user)
+        const user = await GetUser(username, discriminator, guild!.id, member!.user.id)
+        
+        const profileEmbed = ProfileEmbed(interaction.member as GuildMember, user)
 
-            await interaction.reply({
-                embeds: [profileEmbed]
-            })
-        }
+        await interaction.reply({
+            embeds: [profileEmbed]
+        })
+    }
 }
