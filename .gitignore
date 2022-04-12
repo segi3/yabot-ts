@@ -1,3 +1,15 @@
 node_modules/
 .env
 data/static/
+
+# compiled files
+bot-module/*.js*
+commands/**/*.js*
+data/**/*.js*
+features/*.js*
+schemas/*.js*
+service/*.js*
+utils/*.js*
+app*.js*
+command-handler*.js*
+get-files*.js*
