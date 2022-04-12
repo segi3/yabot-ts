@@ -1,6 +1,8 @@
 import { SlashCommandBuilder } from "@discordjs/builders"
 import axios from "axios";
 import { MessageEmbed } from "discord.js";
+import { WeaponEmbed } from "../../data/embeds/elden/weapon-embed";
+import { FetchEldenRingAPI } from "../../service/elden";
 
 export default {
     legacy: false,
@@ -35,8 +37,6 @@ export default {
 
         await interaction.deferReply();
 
-        console.log('seek')
-
         const category = interaction.options.getString('category')
         const itemName = interaction.options.getString('item_name')
 
@@ -45,100 +45,17 @@ export default {
             return
         }
 
-        axios.get(`https://eldenring.fanapis.com/api/${category}?name=${itemName}`)
-            .then(async (res) => {
-                const data = res.data.data[0]
+        const response = await FetchEldenRingAPI(category, itemName)
+        
+        if (response == 'err:failed') {
+            await interaction.editReply('an error occured :(')
+        }
 
-                if (res.data.data < 1) {
-                    await interaction.editReply('visions of sadness, seek not found')
-            return
-                }
+        const weaponEmbed = WeaponEmbed(response.data[0])
 
-                let weapon_att: any = []
-                let weapon_def:any = []
-                let weapon_scales:any = []
-                let weapon_attr:any = []
+        await interaction.editReply({
+            embeds: [weaponEmbed]
+        })
 
-                // console.log(data.attack[0])
-
-                for (var stat of data.attack) {
-                    let statval = 'n/a'
-                    if (stat.amount != null || stat.amount != 'null') statval = stat.amount
-
-                    weapon_att.push({
-                        name: stat.name,
-                        value: statval + '',
-                        inline: true
-                    })
-                }
-
-                for (var stat of data.defence) {
-                    let statval = 'n/a'
-                    if (stat.amount != null || stat.amount != 'null') statval = stat.amount
-
-                    weapon_def.push({
-                        name: stat.name,
-                        value: statval + '',
-                        inline: true
-                    })
-                }
-
-                for (var stat of data.scalesWith) {
-                    let statval = 'n/a'
-                    if (stat.scaling != null) statval = stat.scaling
-
-                    weapon_scales.push({
-                        name: stat.name,
-                        value: statval + '',
-                        inline: true
-                    })
-                }
-
-                for (var stat of data.requiredAttributes) {
-                    let statval = 'n/a'
-                    if (stat.amount != null || stat.amount != 'null') statval = stat.amount
-
-                    weapon_attr.push({
-                        name: stat.name,
-                        value: statval + '',
-                        inline: true
-                    })
-                }
-                // console.log(weapon_att)
-                // console.log(weapon_def)
-                // console.log(weapon_scales)
-                // console.log(weapon_attr)
-
-                // temprary, TODO: make embed class
-                const weaponEmbed = new MessageEmbed()
-                    .setTitle(data.name)
-                    .setDescription(data.description)
-                    .setImage(data.image)
-                    .addField('Attack',' Weapon attack stats', false)
-                    .addFields(weapon_att)
-                    .addField('Defence',' Weapon defence stats', false)
-                    .addFields(weapon_def)
-                    .addField('Weapon Scaling',' Weapon scaling stats', false)
-                    .addFields(weapon_scales)
-                    .addField('Required Attributes',' Attributes required to effectively equip weapon', false)
-                    .addFields(weapon_attr)
-                
-                    
-                // console.log(weaponEmbed)
-                
-                await interaction.editReply({
-                    embeds: [weaponEmbed]
-                })
-
-            })
-            .catch(async (err) => {
-                console.log(err)
-                await interaction.editReply('error occured :(')
-            })
-
-        // const res = await fetch(`https://eldenring.fanapis.com/api/${category}?name=${itemName}`)
-        // const body = await res.text()
-
-        // console.log(body)
     }
 }
