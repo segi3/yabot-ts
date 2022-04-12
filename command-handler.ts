@@ -12,6 +12,7 @@ export default (client: Client) => {
     const commandsData = []
 
     const suffix = '.ts'
+    // const suffix = '.js'
 
     const commandFiles = getFiles('./commands', suffix)
     console.log(commandFiles)
