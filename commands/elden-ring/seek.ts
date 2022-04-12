@@ -3,6 +3,7 @@ import axios from "axios";
 import { MessageEmbed } from "discord.js";
 import { WeaponEmbed } from "../../data/embeds/elden/weapon-embed";
 import { FetchEldenRingAPI } from "../../service/elden";
+import { Paginate } from "../../utils/pagination";
 
 export default {
     legacy: false,
@@ -49,13 +50,19 @@ export default {
         
         if (response == 'err:failed') {
             await interaction.editReply('an error occured :(')
+            return
+        } else if (response == 'err:empty') {
+            await interaction.editReply('seek not found, therefore try again')
+            return
         }
 
-        const weaponEmbed = WeaponEmbed(response.data[0])
+        const weaponEmbeds:any = []
 
-        await interaction.editReply({
-            embeds: [weaponEmbed]
-        })
+        for (let x=0; x<response.data.length; x++) {
+            weaponEmbeds.push( WeaponEmbed(response.data[x]))
+        }
+
+        Paginate(interaction, weaponEmbeds)
 
     }
 }
