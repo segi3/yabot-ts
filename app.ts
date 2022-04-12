@@ -28,6 +28,8 @@ client.on('ready', async () => {
     if (level.default) level = level.default
     level(client)
 
+    client.user?.setPresence({activities: [{ name: 'MALENIA, BLADE OF MIQUELA', type: 'LISTENING'}]})
+
 })
 
 client.login(process.env.TOKEN)
