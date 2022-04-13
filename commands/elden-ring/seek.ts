@@ -1,6 +1,7 @@
 import { SlashCommandBuilder } from "@discordjs/builders"
 import axios from "axios";
 import { MessageEmbed } from "discord.js";
+import { BossEmbed } from "../../data/embeds/elden/boss-embeds";
 import { WeaponEmbed } from "../../data/embeds/elden/weapon-embed";
 import { FetchEldenRingAPI } from "../../service/elden";
 import { Paginate } from "../../utils/pagination";
@@ -61,9 +62,22 @@ export default {
     
             Paginate(interaction, weaponEmbeds)
 
+        } else if (category == 'bosses') {
+
+            const bossEmbeds:any = []
+
+            for (let x=0; x<response.data.length; x++) {
+                bossEmbeds.push(BossEmbed(response.data[x]))
+            }
+
+            Paginate(interaction, bossEmbeds)
+
         }else {
             await interaction.editReply('seek else')
             return
         }
+
+        
+
     }
 }
