@@ -1,7 +1,6 @@
-import axios from "axios"
 import { MessageEmbed } from "discord.js"
 
-export const WeaponEmbed = (data: any, ):MessageEmbed => {
+export const WeaponEmbed = (data: any ):MessageEmbed => {
 
     let weapon_att: any = []
     let weapon_def:any = []
