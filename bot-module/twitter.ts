@@ -20,11 +20,11 @@ export const TweetStatusUpdate = async (status: string) => {
     }
 }
 
-const tweetLogSchema = require('./../schemas/tweet-log-schema')
+import tweetLogSchema from "./../schemas/tweet-log-schema"
 
 export const LogTweet = async (log:any) => {
     try {
-        const response = await tweetLogSchema()
+        const response = await new tweetLogSchema(log).save()
 
         return true
 
