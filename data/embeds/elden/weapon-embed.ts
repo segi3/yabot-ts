@@ -56,6 +56,8 @@ export const WeaponEmbed = (data: any ):MessageEmbed => {
         .setTitle(data.name)
         .setDescription(data.description)
         .setImage(data.image)
+        .addField('Category', data.category, true)
+        .addField('Weight', '' + data.weight, true)
         .addField('Attack',' Weapon attack stats', false)
         .addFields(weapon_att)
         .addField('Defence',' Weapon defence stats', false)
