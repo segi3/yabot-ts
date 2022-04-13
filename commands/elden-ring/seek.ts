@@ -41,13 +41,8 @@ export default {
         const category = interaction.options.getString('category')
         const itemName = interaction.options.getString('item_name')
 
-        if (category != 'weapons') {
-            await interaction.editReply('cuma bisa weapon aja sekarang ehe')
-            return
-        }
-
         const response = await FetchEldenRingAPI(category, itemName)
-        
+
         if (response == 'err:failed') {
             await interaction.editReply('an error occured :(')
             return
@@ -56,13 +51,19 @@ export default {
             return
         }
 
-        const weaponEmbeds:any = []
+        if (category == 'weapons') {
+    
+            const weaponEmbeds:any = []
+    
+            for (let x=0; x<response.data.length; x++) {
+                weaponEmbeds.push(WeaponEmbed(response.data[x]))
+            }
+    
+            Paginate(interaction, weaponEmbeds)
 
-        for (let x=0; x<response.data.length; x++) {
-            weaponEmbeds.push( WeaponEmbed(response.data[x]))
+        }else {
+            await interaction.editReply('seek else')
+            return
         }
-
-        Paginate(interaction, weaponEmbeds)
-
     }
 }
