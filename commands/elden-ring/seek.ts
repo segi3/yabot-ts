@@ -1,6 +1,7 @@
 import { SlashCommandBuilder } from "@discordjs/builders"
 import axios from "axios";
 import { MessageEmbed } from "discord.js";
+import { AmmoEmbed } from "../../data/embeds/elden/ammo-embeds";
 import { BossEmbed } from "../../data/embeds/elden/boss-embeds";
 import { WeaponEmbed } from "../../data/embeds/elden/weapon-embed";
 import { FetchEldenRingAPI } from "../../service/elden";
@@ -71,6 +72,16 @@ export default {
             }
 
             Paginate(interaction, bossEmbeds)
+
+        } else if (category == 'ammos') {
+
+            const ammoEmbed:any = []
+
+            for (let x=0; x<response.data.length; x++) {
+                ammoEmbed.push(AmmoEmbed(response.data[x]))
+            }
+
+            Paginate(interaction, ammoEmbed)
 
         }else {
             await interaction.editReply('seek else')
