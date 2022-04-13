@@ -3,6 +3,7 @@ import axios from "axios";
 import { MessageEmbed } from "discord.js";
 import { AmmoEmbed } from "../../data/embeds/elden/ammo-embeds";
 import { ArmorEmbed } from "../../data/embeds/elden/armor-embed";
+import { AshEmbed } from "../../data/embeds/elden/ashes-embed";
 import { BossEmbed } from "../../data/embeds/elden/boss-embeds";
 import { WeaponEmbed } from "../../data/embeds/elden/weapon-embed";
 import { FetchEldenRingAPI } from "../../service/elden";
@@ -93,6 +94,16 @@ export default {
             }
 
             Paginate(interaction, armorEmbed)
+
+        } else if (category == 'ashes') {
+
+            const ashesEmbed:any = []
+
+            for (let x=0; x<response.data.length; x++) {
+                ashesEmbed.push(AshEmbed(response.data[x]))
+            }
+
+            Paginate(interaction, ashesEmbed)
 
         }else {
             await interaction.editReply('seek else')
