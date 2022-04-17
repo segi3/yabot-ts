@@ -1,7 +1,6 @@
-import axios from "axios"
 import { MessageEmbed } from "discord.js"
 
-export const WeaponEmbed = (data: any, ):MessageEmbed => {
+export const WeaponEmbed = (data: any ):MessageEmbed => {
 
     let weapon_att: any = []
     let weapon_def:any = []
@@ -57,6 +56,8 @@ export const WeaponEmbed = (data: any, ):MessageEmbed => {
         .setTitle(data.name)
         .setDescription(data.description)
         .setImage(data.image)
+        .addField('Category', data.category, true)
+        .addField('Weight', '' + data.weight, true)
         .addField('Attack',' Weapon attack stats', false)
         .addFields(weapon_att)
         .addField('Defence',' Weapon defence stats', false)

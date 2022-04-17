@@ -1,6 +1,10 @@
 import { SlashCommandBuilder } from "@discordjs/builders"
 import axios from "axios";
 import { MessageEmbed } from "discord.js";
+import { AmmoEmbed } from "../../data/embeds/elden/ammo-embeds";
+import { ArmorEmbed } from "../../data/embeds/elden/armor-embed";
+import { AshEmbed } from "../../data/embeds/elden/ashes-embed";
+import { BossEmbed } from "../../data/embeds/elden/boss-embeds";
 import { WeaponEmbed } from "../../data/embeds/elden/weapon-embed";
 import { FetchEldenRingAPI } from "../../service/elden";
 import { Paginate } from "../../utils/pagination";
@@ -41,13 +45,8 @@ export default {
         const category = interaction.options.getString('category')
         const itemName = interaction.options.getString('item_name')
 
-        if (category != 'weapons') {
-            await interaction.editReply('cuma bisa weapon aja sekarang ehe')
-            return
-        }
-
         const response = await FetchEldenRingAPI(category, itemName)
-        
+
         if (response == 'err:failed') {
             await interaction.editReply('an error occured :(')
             return
@@ -56,13 +55,62 @@ export default {
             return
         }
 
-        const weaponEmbeds:any = []
+        if (category == 'weapons') {
+    
+            const weaponEmbeds:any = []
+    
+            for (let x=0; x<response.data.length; x++) {
+                weaponEmbeds.push(WeaponEmbed(response.data[x]))
+            }
+    
+            Paginate(interaction, weaponEmbeds)
 
-        for (let x=0; x<response.data.length; x++) {
-            weaponEmbeds.push( WeaponEmbed(response.data[x]))
+        } else if (category == 'bosses') {
+
+            const bossEmbeds:any = []
+
+            for (let x=0; x<response.data.length; x++) {
+                bossEmbeds.push(BossEmbed(response.data[x]))
+            }
+
+            Paginate(interaction, bossEmbeds)
+
+        } else if (category == 'ammos') {
+
+            const ammoEmbed:any = []
+
+            for (let x=0; x<response.data.length; x++) {
+                ammoEmbed.push(AmmoEmbed(response.data[x]))
+            }
+
+            Paginate(interaction, ammoEmbed)
+
+        } else if (category == 'armors') {
+
+            const armorEmbed:any = []
+
+            for (let x=0; x<response.data.length; x++) {
+                armorEmbed.push(ArmorEmbed(response.data[x]))
+            }
+
+            Paginate(interaction, armorEmbed)
+
+        } else if (category == 'ashes') {
+
+            const ashesEmbed:any = []
+
+            for (let x=0; x<response.data.length; x++) {
+                ashesEmbed.push(AshEmbed(response.data[x]))
+            }
+
+            Paginate(interaction, ashesEmbed)
+
+        }else {
+            await interaction.editReply('seek else')
+            return
         }
 
-        Paginate(interaction, weaponEmbeds)
+        
 
     }
 }
